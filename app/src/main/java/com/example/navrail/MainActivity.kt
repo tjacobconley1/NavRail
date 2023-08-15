@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 
 package com.example.navrail
 
@@ -36,15 +36,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,8 +80,8 @@ class MainActivity : ComponentActivity() {
 
             NavRailTheme {
 
-                val windowClass = calculateWindowSizeClass(this)
-                val showNavigationRail = windowClass.widthSizeClass != WindowWidthSizeClass.Compact
+//                val windowClass = calculateWindowSizeClass(this)
+                val showNavigationRail = true // windowClass.widthSizeClass != WindowWidthSizeClass.Compact
                 var selectedItemIndex by rememberSaveable {
                     mutableStateOf(0)
                 }
@@ -95,9 +93,7 @@ class MainActivity : ComponentActivity() {
 
                     Scaffold(
                         bottomBar = {
-                            if(!showNavigationRail){
-                                // NavigationBar()
-                            }
+
                         },
                         modifier = Modifier.fillMaxSize()
                     ) {
@@ -126,9 +122,9 @@ class MainActivity : ComponentActivity() {
                     NavigationSideBar(
                         items = railItems,
                         selectedItemIndex = selectedItemIndex,
-                        onNavigate = { selectedItemIndex = it})
+                        onNavigate = { selectedItemIndex = it}
+                    )
                 }
-
             }
         }
     }
@@ -161,7 +157,7 @@ fun NavigationSideBar(
         },
         modifier = Modifier
             .background(MaterialTheme.colorScheme.inverseOnSurface)
-            .offset(x= (-1.dp))
+            .offset(x= ((-1).dp))
     ) {
         Column(
             modifier = Modifier.fillMaxHeight(),
@@ -221,3 +217,83 @@ data class NavigationItem(
     val hasNews: Boolean,
     val badgeCount: Int? = null
 )
+
+
+
+
+
+@Preview
+@Composable
+fun Preview() {
+
+        val railItems = listOf(
+            NavigationItem(
+                title = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home,
+                hasNews = false
+            ),
+            NavigationItem(
+                title = "Home",
+                selectedIcon = Icons.Filled.Email,
+                unselectedIcon = Icons.Outlined.Email,
+                hasNews = false,
+                badgeCount = 45
+            ),
+            NavigationItem(
+                title = "Home",
+                selectedIcon = Icons.Filled.Settings,
+                unselectedIcon = Icons.Outlined.Settings,
+                hasNews = true
+            )
+
+        )
+
+        NavRailTheme {
+
+            val showNavigationRail = true
+            var selectedItemIndex by rememberSaveable {
+                mutableIntStateOf(0)
+            }
+
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+
+                Scaffold(
+                    bottomBar = {  },
+                    modifier = Modifier.fillMaxSize()
+                ) {
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(it)
+                            .padding(
+                                if (showNavigationRail) 80.dp else 0.dp
+                            )
+                    ) {
+                        items(100) {
+                            Text(
+                                text = "Item ${it}",
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                    }
+
+                }
+            }
+
+            // OUTSIDE OF SURFACE
+            // OUTSIDE OF SCAFFOLD
+            if (showNavigationRail) {
+                NavigationSideBar(
+                    items = railItems,
+                    selectedItemIndex = selectedItemIndex,
+                    onNavigate = { selectedItemIndex = it }
+                )
+            }
+        }
+}
+
