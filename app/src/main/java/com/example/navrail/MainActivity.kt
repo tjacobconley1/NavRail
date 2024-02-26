@@ -7,18 +7,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.navrail.navigation.Navigation
-import com.example.navrail.viewmodels.MainActivityViewModel
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var viewModel = MainActivityViewModel()
+//        var viewModel = MainActivityViewModel()
 
 
         setContent {
+
+
 
             Navigation()
 

@@ -29,11 +29,13 @@ import com.example.navrail.R
 import com.example.navrail.navigation.NavigationItem
 import com.example.navrail.navigation.NavigationSideBar
 import com.example.navrail.ui.theme.NavRailTheme
+import com.example.navrail.viewmodels.HomeScreenViewModel
 
 
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    homeScreenViewModel: HomeScreenViewModel
 ){
 
     val railItems = listOf(
